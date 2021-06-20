@@ -3,9 +3,9 @@ import pandas as pd
 
 
 def draw_basic_plot(filename, title):
-    df = pd.read_json('..\\data\\{}.json'.format(filename))
+    df = pd.read_csv('..\\data\\{}.csv'.format(filename))
 
-    fig = px.line(df, x='formatted_date', y='adjclose', title=title, )
+    fig = px.line(df, x='date', y='close', title=title, )
 
     fig.update_xaxes(
         rangeslider_visible=True,
