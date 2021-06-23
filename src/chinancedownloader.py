@@ -45,6 +45,9 @@ def update_from_investing(filename: str, country: str,  ticket: str, date_from: 
                        'Currency': 'currency', }, inplace=True)
     df = df.assign(capitalisation=0.0, secid='investing:' + ticket)
 
+    df = df[['secid', 'currency', 'date', 'close', 'open',
+             'low', 'high', 'volume', 'capitalization']]
+
     df.to_csv('..\\data\\{}.csv'.format(filename))
 
 
@@ -61,6 +64,9 @@ def update_from_moex(filename: str, ticket: str, date_from: date, date_to: date)
                                                     'SECID': 'secid',  'VALUE': 'volume',
                                                     'CURRENCYID': 'currency',  'CAPITALIZATION': 'capitalization', }, inplace=True)
 
+    df = df[['secid', 'currency', 'date', 'close', 'open',
+             'low', 'high', 'volume', 'capitalization']]
+
     df.to_csv('..\\data\\{}.csv'.format(filename))
 
 
@@ -72,10 +78,14 @@ def update_from_stooq(filename: str, ticket: str, date_from: date, date_to: date
 
     df = pd.read_csv(url)
     df.rename(columns={'Date': 'date', 'Open': 'open',
-                       'High': 'high', 'Low': 'low', 'Close': 'close', }, inplace=True)
+                       'High': 'high', 'Low': 'low',
+                       'Close': 'close', 'Volume': 'volume'}, inplace=True)
 
     df = df.assign(volume=0.0, capitalization=0.0,
                    currency='USD', secid='STOOQ:' + ticket)
+
+    df = df[['secid', 'currency', 'date', 'close', 'open',
+             'low', 'high', 'volume', 'capitalization']]
 
     df.to_csv('..\\data\\{}.csv'.format(filename))
 
@@ -104,6 +114,10 @@ def update_from_msci(filename: str, ticket: str, date_from: date, date_to: date)
                        'volume':        0.0,
                        'capitalisation': 0.0,
                        'currency':      pd.Series(['USD'] * len(xls['Unnamed: 0']))})
+
+    df = df[['secid', 'currency', 'date', 'close', 'open',
+             'low', 'high', 'volume', 'capitalization']]
+
     df.to_csv('..\\data\\{}.csv'.format(filename))
     if(os.path.isfile('..\\data\\msci_temp.xls')):
         os.remove('..\\data\\msci_temp.xls')
@@ -120,5 +134,8 @@ def update_from_yahoo(filename: str, ticket: str, date_from: date, date_to: date
 
     df = df.assign(capitalization=0.0,
                    currency=historical_stock_prices[ticket]['currency'], secid='yahoo:' + ticket)
+
+    df = df[['secid', 'currency', 'date', 'close', 'open',
+             'low', 'high', 'volume', 'capitalization']]
 
     df.to_csv('..\\data\\{}.csv'.format(filename))

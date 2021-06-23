@@ -4,7 +4,6 @@ import pandas as pd
 
 def draw_basic_plot(filename, title):
     df = pd.read_csv('..\\data\\{}.csv'.format(filename))
-
     fig = px.line(df, x='date', y='close', title=title, )
 
     fig.update_xaxes(
