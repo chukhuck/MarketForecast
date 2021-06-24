@@ -44,7 +44,11 @@ def update_from_investing(filename: str, country: str,  ticket: str, date_from: 
                        'High': 'high', 'Low': 'low',
                        'Close': 'close', 'Volume': 'volume',
                        'Currency': 'currency', }, inplace=True)
-    df = df.assign(capitalisation=0.0, secid='investing:' + ticket)
+
+    if 'capitalization' not in df.columns:
+        df = df.assign(capitalization=0.0)
+
+    df = df.assign(secid='investing:' + ticket)
 
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
@@ -63,9 +67,9 @@ def update_from_moex(filename: str, ticket: str, date_from: date, date_to: date)
                "LOW", "HIGH", "VALUE", "CURRENCYID", 'CAPITALIZATION']]
 
     df.rename(columns={'TRADEDATE': 'date', 'OPEN': 'open',
-                                                    'HIGH': 'high', 'LOW': 'low', 'CLOSE': 'close',
-                                                    'SECID': 'secid',  'VALUE': 'volume',
-                                                    'CURRENCYID': 'currency',  'CAPITALIZATION': 'capitalization', }, inplace=True)
+                       'HIGH': 'high', 'LOW': 'low', 'CLOSE': 'close',
+                       'SECID': 'secid',  'VALUE': 'volume',
+                       'CURRENCYID': 'currency',  'CAPITALIZATION': 'capitalization', }, inplace=True)
 
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
@@ -86,8 +90,13 @@ def update_from_stooq(filename: str, ticket: str, date_from: date, date_to: date
                        'High': 'high', 'Low': 'low',
                        'Close': 'close', 'Volume': 'volume'}, inplace=True)
 
-    df = df.assign(volume=0.0, capitalization=0.0,
-                   currency='USD', secid='STOOQ:' + ticket)
+    if 'volume' not in df.columns:
+        df = df.assign(volume=0.0)
+
+    if 'capitalization' not in df.columns:
+        df = df.assign(capitalization=0.0)
+
+    df = df.assign(currency='USD', secid='STOOQ:' + ticket)
 
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
