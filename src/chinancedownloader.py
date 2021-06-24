@@ -12,24 +12,32 @@ from pathlib import Path
 
 def get_or_update_data(source: str, country: str, ticket: str, date_from: date, date_to: date, filename: str, currency: str = 'UNK'):
 
-    data = DataFrame()
-    if source is 'moex':
-        data = get_data_from_moex(
-            ticket=ticket, date_from=date_from, date_to=date_to)
-    elif source is 'stooq':
-        data = get_data_from_stooq(
-            ticket=ticket, date_from=date_from, date_to=date_to, currency=currency)
-    elif source is 'msci':
-        data = get_data_from_msci(
-            ticket=ticket, date_from=date_from, date_to=date_to)
-    elif source is 'yahoo':
-        data = get_data_from_yahoo(
-            ticket=ticket, date_from=date_from, date_to=date_to, currency=currency)
-    elif source is 'investing':
-        data = get_data_from_investing(ticket=ticket, country=country,
-                                       date_from=date_from, date_to=date_to)
-    else:
-        raise ValueError('Unknown data source')
+    try:
+        if source is 'moex':
+            data = get_data_from_moex(
+                ticket=ticket, date_from=date_from, date_to=date_to)
+        elif source is 'stooq':
+            data = get_data_from_stooq(
+                ticket=ticket, date_from=date_from, date_to=date_to, currency=currency)
+        elif source is 'msci':
+            data = get_data_from_msci(
+                ticket=ticket, date_from=date_from, date_to=date_to)
+        elif source is 'yahoo':
+            data = get_data_from_yahoo(
+                ticket=ticket, date_from=date_from, date_to=date_to, currency=currency)
+        elif source is 'investing':
+            data = get_data_from_investing(ticket=ticket, country=country,
+                                           date_from=date_from, date_to=date_to)
+        else:
+            raise ValueError('Unknown data source')
+    except RuntimeError:
+        data = DataFrame(columns={'date', 'secid', 'close', 'open',
+                                  'low', 'high', 'volume', 'capitalisation', 'currency'})
+    except ValueError:
+        raise ValueError('Unknown data source or another')
+    except:
+        data = pd.DataFrame(columns={'date', 'secid', 'close', 'open',
+                                     'low', 'high', 'volume', 'capitalisation', 'currency'})
 
     data = set_good_look(data)
     save_to_csv(data, filename=filename)
@@ -43,13 +51,11 @@ def get_data_from_investing(ticket: str, country: str, date_from: date, date_to:
                                               from_date=date_from.strftime(
                                                   '%d/%m/%Y'),
                                               to_date=date_to.strftime('%d/%m/%Y'))
-
     data.reset_index(inplace=True)
     data.rename(columns={'Date': 'date', 'Open': 'open',
                          'High': 'high', 'Low': 'low',
                          'Close': 'close', 'Volume': 'volume',
                          'Currency': 'currency', }, inplace=True)
-
     data = data.assign(secid='investing:' + ticket)
 
     return data
