@@ -53,6 +53,8 @@ def update_from_investing(filename: str, country: str,  ticket: str, date_from: 
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
 
+    df.set_index(['date'], inplace=True)
+
     path_to_file = '..\\data\\{}.csv'.format(filename)
     df.to_csv(path_to_file,
               mode='a', header=(not Path(path_to_file).is_file()))
@@ -73,6 +75,8 @@ def update_from_moex(filename: str, ticket: str, date_from: date, date_to: date)
 
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
+
+    df.set_index(['date'], inplace=True)
 
     path_to_file = '..\\data\\{}.csv'.format(filename)
     df.to_csv(path_to_file,
@@ -100,6 +104,8 @@ def update_from_stooq(filename: str, ticket: str, date_from: date, date_to: date
 
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
+
+    df.set_index(['date'], inplace=True)
 
     path_to_file = '..\\data\\{}.csv'.format(filename)
     df.to_csv(path_to_file,
@@ -134,6 +140,8 @@ def update_from_msci(filename: str, ticket: str, date_from: date, date_to: date)
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
 
+    df.set_index(['date'], inplace=True)
+
     path_to_file = '..\\data\\{}.csv'.format(filename)
     df.to_csv(path_to_file,
               mode='a', header=(not Path(path_to_file).is_file()))
@@ -156,6 +164,8 @@ def update_from_yahoo(filename: str, ticket: str, date_from: date, date_to: date
 
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
+
+    df.set_index(['date'], inplace=True)
 
     path_to_file = '..\\data\\{}.csv'.format(filename)
     df.to_csv(path_to_file,
