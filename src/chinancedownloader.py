@@ -114,13 +114,13 @@ def update_from_msci(filename: str, ticket: str, date_from: date, date_to: date)
         xls.index[list(range(len(xls.index) - 19, len(xls.index)))])
     df = pd.DataFrame({'date': [datetime.datetime.strptime(d, "%b %d, %Y").date() for d in xls['Unnamed: 0'].values],
                        'secid':         'MSCI:' + filename,
-                       'close':         xls['Unnamed: 1'].values,
-                       'open':          0.0,
-                       'low':           0.0,
-                       'high':          0.0,
-                       'volume':        0.0,
+                       'close':          xls['Unnamed: 1'].values,
+                       'open':           0.0,
+                       'low':            0.0,
+                       'high':           0.0,
+                       'volume':         0.0,
                        'capitalisation': 0.0,
-                       'currency':      pd.Series(['USD'] * len(xls['Unnamed: 0']))})
+                       'currency':      'USD'})
 
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
