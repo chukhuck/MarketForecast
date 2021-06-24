@@ -6,6 +6,7 @@ from yahoofinancials import YahooFinancials
 import pandas as pd
 import os
 import investpy
+from pathlib import Path
 
 
 def update_data(source: str, country: str, ticket: str, date_from: date, date_to: date, filename: str, currency: str = 'UNK'):
@@ -48,7 +49,9 @@ def update_from_investing(filename: str, country: str,  ticket: str, date_from: 
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
 
-    df.to_csv('..\\data\\{}.csv'.format(filename))
+    path_to_file = '..\\data\\{}.csv'.format(filename)
+    df.to_csv(path_to_file,
+              mode='a', header=(not Path(path_to_file).is_file()))
 
 
 def update_from_moex(filename: str, ticket: str, date_from: date, date_to: date):
@@ -67,7 +70,9 @@ def update_from_moex(filename: str, ticket: str, date_from: date, date_to: date)
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
 
-    df.to_csv('..\\data\\{}.csv'.format(filename))
+    path_to_file = '..\\data\\{}.csv'.format(filename)
+    df.to_csv(path_to_file,
+              mode='a', header=(not Path(path_to_file).is_file()))
 
 
 def update_from_stooq(filename: str, ticket: str, date_from: date, date_to: date, currency='UNK'):
@@ -87,7 +92,9 @@ def update_from_stooq(filename: str, ticket: str, date_from: date, date_to: date
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
 
-    df.to_csv('..\\data\\{}.csv'.format(filename))
+    path_to_file = '..\\data\\{}.csv'.format(filename)
+    df.to_csv(path_to_file,
+              mode='a', header=(not Path(path_to_file).is_file()))
 
 
 def update_from_msci(filename: str, ticket: str, date_from: date, date_to: date):
@@ -105,7 +112,7 @@ def update_from_msci(filename: str, ticket: str, date_from: date, date_to: date)
     xls = xls.drop(xls.index[[0, 1, 2, 3, 4, 5]])
     xls = xls.drop(
         xls.index[list(range(len(xls.index) - 19, len(xls.index)))])
-    df = pd.DataFrame({'date':          [datetime.datetime.strptime(d, "%b %d, %Y").date() for d in xls['Unnamed: 0'].values],
+    df = pd.DataFrame({'date': [datetime.datetime.strptime(d, "%b %d, %Y").date() for d in xls['Unnamed: 0'].values],
                        'secid':         'MSCI:' + filename,
                        'close':         xls['Unnamed: 1'].values,
                        'open':          0.0,
@@ -118,7 +125,10 @@ def update_from_msci(filename: str, ticket: str, date_from: date, date_to: date)
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
 
-    df.to_csv('..\\data\\{}.csv'.format(filename))
+    path_to_file = '..\\data\\{}.csv'.format(filename)
+    df.to_csv(path_to_file,
+              mode='a', header=(not Path(path_to_file).is_file()))
+
     if(os.path.isfile('..\\data\\msci_temp.xls')):
         os.remove('..\\data\\msci_temp.xls')
 
@@ -138,4 +148,6 @@ def update_from_yahoo(filename: str, ticket: str, date_from: date, date_to: date
     df = df[['secid', 'currency', 'date', 'close', 'open',
              'low', 'high', 'volume', 'capitalization']]
 
-    df.to_csv('..\\data\\{}.csv'.format(filename))
+    path_to_file = '..\\data\\{}.csv'.format(filename)
+    df.to_csv(path_to_file,
+              mode='a', header=(not Path(path_to_file).is_file()))
